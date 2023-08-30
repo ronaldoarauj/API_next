@@ -1,4 +1,4 @@
-async function tempo(request, response) {
+async function Tempo(request, response) {
     const apiSecret = process.env.SECRET_API_KEY;
     const dynamicDate = new Date();
 
@@ -15,4 +15,4 @@ async function tempo(request, response) {
 }
 
 
-export default tempo;
+export default Tempo;
