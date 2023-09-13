@@ -1,4 +1,4 @@
-const jwt = require('jsonwebtoken');
+import jwt from 'jsonwebtoken';
 
 function generateToken(dadosUser) {
   // Chave secreta usada para assinar o token
