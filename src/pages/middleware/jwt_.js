@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 
 function generateToken(dadosUser) {
   // Chave secreta usada para assinar o token
-  const chave = 'K9xkrz0w5e1ykju8';
+  const chave = 'token';
 
   // Configuração do token (header e payload)
   const header = {

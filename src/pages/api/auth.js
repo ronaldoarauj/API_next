@@ -1,4 +1,4 @@
-const { generateToken } = require('../middleware/jwt');
+const { generateToken } = require('../middleware/jwt_');
 
 const dadosUser = {
   id: 1,
