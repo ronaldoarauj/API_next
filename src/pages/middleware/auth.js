@@ -1,7 +1,7 @@
 // middleware/jwt.js
 import jwt from 'jsonwebtoken';
 
-// middleware/jwt.js
+
 const jwt = require('jsonwebtoken');
 
 function validarToken(token) {
