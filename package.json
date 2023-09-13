@@ -18,6 +18,9 @@
   },
   "homepage": "https://github.com/ronaldoarauj/API_next#readme",
   "dependencies": {
+    "cookie": "^0.5.0",
+    "jsonwebtoken": "^9.0.2",
+    "mysql2": "^3.6.0",
     "next": "^13.4.19",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
