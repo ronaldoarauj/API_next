@@ -1,10 +1,10 @@
-const { generateToken } = require('../middleware/jwt_');
+// const { generateToken } = require('../middleware/jwt_');
 
-const dadosUser = {
-  id: 1,
-  name: 'teste novo',
-  email: 'usuario@example.com',
-};
+// const dadosUser = {
+//   id: 1,
+//   name: 'teste novo',
+//   email: 'usuario@example.com',
+// };
 
-const tokens = generateToken(dadosUser);
-console.log(tokens);
+// const tokens = generateToken(dadosUser);
+// console.log(tokens);
