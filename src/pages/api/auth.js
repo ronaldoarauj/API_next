@@ -43,16 +43,16 @@ export default async function handler(req, res) {
       //   break;
 
       case "POST":
-        const versionId = req.body.id;
-        const versionName = req.body.version;
+        const userName = req.body.user;
+        const userPassword = req.body.password;
 
-        if (versionId) {
+        if (userName) {
           // Buscar um produto por ID
-          const product = await query({
-            query: "SELECT * FROM grace_version WHERE id = ?",
-            values: [versionId],
+          const user = await query({
+            query: "SELECT * FROM grace_user WHERE email = ? AND password = ?",
+            values: [userName,userPassword],
           });
-          if (product.length === 0) {
+          if (user.length === 0) {
             res.status(404).json({ error: "version not found" });
           } else {
 
