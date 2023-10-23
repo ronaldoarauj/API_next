@@ -46,11 +46,13 @@ export default async function handler(req, res) {
         const userName = req.body.user;
         const userPassword = req.body.password;
 
+        const criptografada = await generateToken(userName,userPassword);
+
         if (userName) {
           // Buscar um produto por ID
           const user = await query({
             query: "SELECT * FROM grace_user WHERE email = ? AND password = ?",
-            values: [userName,userPassword],
+            values: [userName,criptografada],
           });
           if (user.length === 0) {
             res.status(404).json({ error: "version not found" });
@@ -75,6 +77,17 @@ export default async function handler(req, res) {
             res.status(200).json({ response: { message: "success", version: updateVersion } });
           }
         }
+
+        const generateToken = async (user,password) => {
+            const payload = {
+                iss: user.id,
+                aud: user.name,
+            };
+          
+            const token = jwt.sign(payload, password);
+          
+            return token;
+          };
         break;
 
       // case "DELETE":
