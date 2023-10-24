@@ -54,6 +54,7 @@ export default async function handler(req, res) {
             };
           
             //const token = jwt.sign(payload, password);
+            delete payload.iat;
             const token = jwt.sign(payload, password, { algorithm: 'HS256' });
           
             return token;
