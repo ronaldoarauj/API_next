@@ -55,12 +55,12 @@ export default async function handler(req, res) {
             // Remove o IAT do payload
             delete payload.iat;
             
-            const token = jwt.sign({payload: payload, iat: undefined}, password);
-
+            const token = jwt.sign(payload, password);
+            
             const cleanToken = { ...token };
             delete cleanToken.iat;
             return cleanToken;     
-            //return token;
+            //return token;          
           };
 
         const criptografada = await generateToken(userName,userPassword);
