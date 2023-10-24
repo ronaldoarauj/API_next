@@ -49,6 +49,7 @@ export default async function handler(req, res) {
         const generateToken = async (user,password) => {
             const payload = {
                 iss: 'grace',
+                teste: 'teste',
                 aud: user,
             };
           
@@ -66,7 +67,7 @@ export default async function handler(req, res) {
             values: [userName,criptografada],
           });
           if (user.length === 0) {
-            res.status(404).json({ error: "version not found", criptografada: criptografada });
+            res.status(404).json({ error: "version not found 2", criptografada: criptografada });
           } else {
 
             const secret = "seu-segredo";
