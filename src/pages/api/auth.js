@@ -46,6 +46,17 @@ export default async function handler(req, res) {
         const userName = req.body.user;
         const userPassword = req.body.password;
 
+        const generateToken = async (user,password) => {
+            const payload = {
+                iss: user.id,
+                aud: user.name,
+            };
+          
+            const token = jwt.sign(payload, password);
+          
+            return token;
+          };
+
         const criptografada = await generateToken(userName,userPassword);
 
         if (userName) {
@@ -77,17 +88,6 @@ export default async function handler(req, res) {
             res.status(200).json({ response: { message: "success", version: updateVersion } });
           }
         }
-
-        const generateToken = async (user,password) => {
-            const payload = {
-                iss: user.id,
-                aud: user.name,
-            };
-          
-            const token = jwt.sign(payload, password);
-          
-            return token;
-          };
         break;
 
       // case "DELETE":
