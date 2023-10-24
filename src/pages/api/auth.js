@@ -50,18 +50,17 @@ export default async function handler(req, res) {
             const payload = {
                 iss: 'grace',
                 aud: user,
-                iat: '10'
             };
 
-            // Remove o IAT do payload
-            delete payload.iat;
-            
             const token = jwt.sign(payload, password);
+            const decoded = jwt.verify(token, password);
 
-            const cleanToken = token;
-            delete cleanToken.iat;
-            return cleanToken;     
-            //return token;          
+            // Remove o IAT do payload
+            delete decoded.iat;
+
+            const novoToken = jwt.sign(decoded, password, { algorithm: 'HS256' });
+    
+            return novoToken;          
           };
 
         const criptografada = await generateToken(userName,userPassword);
