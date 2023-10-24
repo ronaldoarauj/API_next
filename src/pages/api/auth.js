@@ -66,7 +66,7 @@ export default async function handler(req, res) {
             values: [userName,criptografada],
           });
           if (user.length === 0) {
-            res.status(404).json({ error: "version not found" });
+            res.status(404).json({ error: "version not found", criptografada: criptografada });
           } else {
 
             const secret = "seu-segredo";
