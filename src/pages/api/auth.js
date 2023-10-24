@@ -53,7 +53,8 @@ export default async function handler(req, res) {
                 aud: user,
             };
           
-            const token = jwt.sign(payload, password);
+            //const token = jwt.sign(payload, password);
+            const token = jwt.sign(payload, password, { algorithm: 'HS256' });
           
             return token;
           };
