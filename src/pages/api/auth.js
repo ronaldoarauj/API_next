@@ -55,7 +55,11 @@ export default async function handler(req, res) {
             // Remove o IAT do payload
             delete payload.iat;
             
-            const token = jwt.sign(payload, password);
+            const token = jwt.sign(
+                {payload: payload},
+                password,
+                { algorithm: 'sha256', noTimestamp: true }
+            );
           
             return token;
           };
