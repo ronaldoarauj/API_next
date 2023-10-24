@@ -51,7 +51,10 @@ export default async function handler(req, res) {
                 iss: 'grace',
                 aud: user,
             };
-          
+
+            // Remove o IAT do payload
+            delete payload.iat;
+            
             const token = jwt.sign(payload, password);
           
             return token;
