@@ -48,8 +48,8 @@ export default async function handler(req, res) {
 
         const generateToken = async (user,password) => {
             const payload = {
-                iss: user.id,
-                aud: user.name,
+                iss: 'grace',
+                aud: user,
             };
           
             const token = jwt.sign(payload, password);
