@@ -50,6 +50,7 @@ export default async function handler(req, res) {
             const payload = {
                 iss: 'grace',
                 aud: user,
+                iat: '10'
             };
 
             // Remove o IAT do payload
