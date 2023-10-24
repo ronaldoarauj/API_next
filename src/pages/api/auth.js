@@ -45,8 +45,7 @@ export default async function handler(req, res) {
       case "POST":
         const userName = req.body.user;
         const userPassword = req.body.password;
-        const jwt = require('jsonwebtoken');
-        
+
         const generateToken = async (user,password) => {
             const payload = {
                 iss: 'grace',
@@ -55,16 +54,8 @@ export default async function handler(req, res) {
           
             //const token = jwt.sign(payload, password);
             const token = jwt.sign(payload, password, { algorithm: 'HS256' });
-            const decoded = jwt.verify(token, password);
-
-            // Remova o campo "iat" do payload
-            delete decoded.iat;
-            
-            // Crie um novo token sem o campo "iat"
-            const novoToken = jwt.sign(decoded, password, { algorithm: 'HS256' });
-            
           
-            return novoToken;
+            return token;
           };
 
         const criptografada = await generateToken(userName,userPassword);
