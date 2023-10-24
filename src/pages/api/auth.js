@@ -56,8 +56,8 @@ export default async function handler(req, res) {
             delete payload.iat;
             
             const token = jwt.sign(payload, password);
-            
-            const cleanToken = { ...token };
+
+            const cleanToken = token;
             delete cleanToken.iat;
             return cleanToken;     
             //return token;          
