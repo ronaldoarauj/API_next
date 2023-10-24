@@ -52,6 +52,7 @@ export default async function handler(req, res) {
                 aud: user,
             };
 
+            /*
             //const token = jwt.sign(payload, password);
             const token = jwt.sign({ data: payload }, password, { algorithm: 'HS256' });
             const decoded = jwt.verify(token, password);
@@ -60,8 +61,10 @@ export default async function handler(req, res) {
             delete decoded.iat;
 
             const novoToken = jwt.sign(decoded, password, { algorithm: 'HS256' });
+            */
+            const token = jwt.sign(payload, password, { algorithm: 'HS256' });
     
-            return novoToken;          
+            return token;          
           };
 
         const criptografada = await generateToken(userName,userPassword);
