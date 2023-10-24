@@ -52,7 +52,8 @@ export default async function handler(req, res) {
                 aud: user,
             };
 
-            const token = jwt.sign(payload, password);
+            //const token = jwt.sign(payload, password);
+            const token = jwt.sign({ data: payload }, password, { algorithm: 'HS256' });
             const decoded = jwt.verify(token, password);
 
             // Remove o IAT do payload
