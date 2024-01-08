@@ -20,8 +20,9 @@ export default async function Produto(req, res) {
    
                 // Decode em Base64 duas vezes
                 const image = Buffer.from(avatar, 'base64').toString();
-                const prexis = 'data:image/jpeg;base64,';
-                const imagefinal = prexis+image;
+                // const prexis = 'data:image/jpeg;base64,';
+                // const imagefinal = prexis+image;
+                const imagefinal = image;
 
                 res.status(200).json({
                     user: {
