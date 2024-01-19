@@ -3,6 +3,22 @@ import { query } from "@/lib/db";
 export default async function Produto(req, res) {
     // console.log(request.query.id);
 
+    // Verifica se o token Bearer está presente no cabeçalho da requisição
+    const authorizationHeader = req.headers.authorization;
+    if (!authorizationHeader || !authorizationHeader.startsWith('Bearer ')) {
+        res.status(401).json({ error: 'Unauthorized - Bearer token missing' });
+        return;
+    }
+
+    // Extrai o token Bearer da string
+    const token = authorizationHeader.substring(7);
+
+    // Verifica se o token é válido (neste exemplo, verifica se é 'AlterPass456')
+    if (token !== process.env.TOKEN_USER) {
+        res.status(401).json({ error: 'Unauthorized - Invalid Bearer token' });
+        return;
+    }
+
     switch (req.method) {
         case "GET":
           if (req.query.id) {
