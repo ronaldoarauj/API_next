@@ -23,7 +23,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     try {
         if (method === 'POST') {
             const response = await userController.createUser(body);
-            return res.status(201).json({ message: 'ok', data: response })
+            return res.status(201).json({ message: 'ok ', data: response })
         }
         const response = await userController.findAllUsers()
         return res.status(200).json({ message: 'ok', data: response })
