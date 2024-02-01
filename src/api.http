@@ -1,0 +1,40 @@
+@tokenEndpoint = http://localhost:3000/api/token
+
+
+POST {{tokenEndpoint}}
+Content-Type: application/json
+
+
+{
+    "username": "seu_usuario",
+    "password": "sua_senha"
+}
+
+
+###
+@token = Teste
+
+
+//User
+###
+GET http://localhost:3000/api/users
+Content-Type: application/json
+Authorization: Bearer {{token}}
+###
+GET http://localhost:3000/api/users/1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+###
+POST http://localhost:3000/api/users
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{      
+    "avatar": "https://example.com/avatar.jpg",
+    "details": "teste",
+    "email": "johndoe@example.com",
+    "name": "John Doe",
+    "isActive": true
+}
+
+
