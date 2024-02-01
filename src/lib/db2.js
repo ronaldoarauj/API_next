@@ -12,7 +12,7 @@ export async function query({ query, values = [] }) {
       host: process.env.MYSQL_HOST2,
       database: process.env.MYSQL_DATABASE2,
       user: process.env.MYSQL_USER2,
-      password: process.env.MYSQL_PASSWORD2,
+      password: process.env.MYSQL_PASSWORD,
     });
 
     const [results] = await dbconnection.execute(query, values);
