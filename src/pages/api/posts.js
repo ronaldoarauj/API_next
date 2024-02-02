@@ -88,7 +88,7 @@ export default async function handler(req, res) {
 
                 const updatePosts = await query({
                     query: "UPDATE post SET descricao = ?, data = ? WHERE id_post = ?",
-                    values: [postDescricao, dataFormatada, postId],
+                    values: [postDescricaoHtml, dataFormatada, postId],
                 });
 
                 // console.log('Database update successful.');
