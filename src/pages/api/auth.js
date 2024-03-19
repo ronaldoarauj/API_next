@@ -43,7 +43,7 @@ export default async function handler(req, res) {
       //   break;
 
       case "POST":
-        const userName = req.body.user;
+        const userName = req.body.email;
         const userPassword = req.body.password;
 
         const generateToken = async (user, password) => {
