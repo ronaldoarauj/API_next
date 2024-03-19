@@ -78,7 +78,7 @@ export default async function handler(req, res) {
             const payload = {
               iss: userName,
               aud: 'Grace API',
-              id: user[0].id,
+              id: user[0].id.toString(),
               nome: user[0].name
             };
 
