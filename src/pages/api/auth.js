@@ -48,7 +48,7 @@ export default async function handler(req, res) {
 
         const generateToken = async (user, password) => {
           const payload = {
-            iss: 'grace',
+            iss: "grace",
             aud: user
           };
 
