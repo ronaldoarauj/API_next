@@ -75,7 +75,6 @@ export default async function handler(req, res) {
           } else {
 
             const secret = process.env.SECRET_API_KEY_JWT;
-
             const payload = {
               iss: userName,
               aud: 'Grace API',
