@@ -7,27 +7,27 @@ export default async function handler(req, res) {
     res.setHeader('Cache-Control', 's-maxage=10, stale-while-revalidate');
 
     switch (req.method) {
-    //   case "POST":
-    //     if (req.query.id) {
-    //       // Buscar um produto por ID
-    //       const productId = req.query.id;
-    //       const product = await query({
-    //         query: "SELECT * FROM grace_version WHERE id = ?",
-    //         values: [productId],
-    //       });
-    //       if (product.length === 0) {
-    //         res.status(404).json({ error: "Product not found" });
-    //       } else {
-    //         res.status(200).json({ version: product[0] });
-    //       }
-    //     } else {
-    //       // Listar todos os produtos
-    //       const version = await query({
-    //         query: "SELECT * FROM grace_version",
-    //       });
-    //       res.status(200).json({ version });
-    //     }
-    //     break;
+      //   case "POST":
+      //     if (req.query.id) {
+      //       // Buscar um produto por ID
+      //       const productId = req.query.id;
+      //       const product = await query({
+      //         query: "SELECT * FROM grace_version WHERE id = ?",
+      //         values: [productId],
+      //       });
+      //       if (product.length === 0) {
+      //         res.status(404).json({ error: "Product not found" });
+      //       } else {
+      //         res.status(200).json({ version: product[0] });
+      //       }
+      //     } else {
+      //       // Listar todos os produtos
+      //       const version = await query({
+      //         query: "SELECT * FROM grace_version",
+      //       });
+      //       res.status(200).json({ version });
+      //     }
+      //     break;
 
       // case "POST":
       //   const postUserName = req.body.product_name;
@@ -46,48 +46,55 @@ export default async function handler(req, res) {
         const userName = req.body.user;
         const userPassword = req.body.password;
 
-        const generateToken = async (user,password) => {
-            const payload = {
-                iss: 'grace',
-                aud: user
-            };
-          
-            //const token = jwt.sign(payload, password);
-            delete payload.iat;
-            const token = jwt.sign(payload, password, { algorithm: 'HS256' });
-          
-            return token;
+        const generateToken = async (user, password) => {
+          const payload = {
+            iss: 'grace',
+            aud: user
           };
 
-        const criptografada = await generateToken(userName,userPassword);
+          //const token = jwt.sign(payload, password);
+          const options = {
+            algorithm: "HS256",
+            noTimestamp: true,
+          };
+          const token = jwt.sign(payload, password, options);
+
+          return token;
+        };
+
+        const criptografada = await generateToken(userName, userPassword);
 
         if (userName) {
           // Buscar um produto por ID
           const user = await query({
             query: "SELECT * FROM grace_user WHERE email = ? AND password = ?",
-            values: [userName,criptografada],
+            values: [userName, criptografada],
           });
           if (user.length === 0) {
             res.status(404).json({ error: "version not found 2", criptografada: criptografada });
           } else {
 
-            const secret = "seu-segredo";
+            const secret = process.env.SECRET_API_KEY_JWT;
 
             const payload = {
-            id: 1,
-            name: "John Doe",
-            email: "johndoe@example.com",
+              iss: userName,
+              aud: 'Grace API',
+              id: user[0].id,
+              nome: user[0].name
             };
 
             const token = jwt.sign(payload, secret, {
-            expiresIn: "1h",
+              expiresIn: "1h", noTimestamp: true
             });
-            console.log(token);
-            const updateVersion = {
-              token: token,
-              version: 'versionName',
-            };
-            res.status(200).json({ response: { message: "success", version: updateVersion } });
+            const refreshToken = jwt.sign(payload, secret, {
+              expiresIn: "30d", noTimestamp: true
+            });
+            //console.log(token);
+            // const updateVersion = {
+            //   token: token,
+            //   version: 'versionName',
+            // };
+            res.status(200).json({ access_token: token, refresh_token: refreshToken, type: 'Bearer' });
           }
         }
         break;
