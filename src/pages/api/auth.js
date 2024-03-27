@@ -93,7 +93,7 @@ export default async function handler(req, res) {
             //   token: token,
             //   version: 'versionName',
             // };
-            res.status(200).json({ access_token: token+"=", refresh_token: refreshToken, type: 'Bearer' });
+            res.status(200).json({ access_token: token, refresh_token: refreshToken, type: 'Bearer' });
           }
         }
         break;
