@@ -57,8 +57,7 @@ export default async function handler(req, res) {
             algorithm: "HS256",
             noTimestamp: true,
           };
-          const token = jwt.sign(payload, password, options);
-
+          var token = jwt.sign(payload, password, options);
           return token;
         };
 
