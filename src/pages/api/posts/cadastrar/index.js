@@ -51,40 +51,51 @@ export default async function handler(req, res) {
         }
 
         switch (req.method) {
-            case "GET":
-                if (req.query.id) {
-                    // Buscar um produto por ID
-                    const productId = req.query.id;
-                    const product = await query({
-                        query: "SELECT * FROM grace_version WHERE id = ?",
-                        values: [productId],
-                    });
-                    if (product.length === 0) {
-                        res.status(404).json({ error: "Product not found" });
-                    } else {
-                        res.status(200).json({ version: product[0] });
-                    }
-                } else {
-                    // Listar todos os produtos
-                    const version = await query({
-                        query: "SELECT * FROM grace_version",
-                    });
-                    res.status(200).json({ version });
-                }
-                break;
+            // case "GET":
+            //     if (req.query.id) {
+            //         // Buscar um produto por ID
+            //         const productId = req.query.id;
+            //         const product = await query({
+            //             query: "SELECT * FROM grace_version WHERE id = ?",
+            //             values: [productId],
+            //         });
+            //         if (product.length === 0) {
+            //             res.status(404).json({ error: "Product not found" });
+            //         } else {
+            //             res.status(200).json({ version: product[0] });
+            //         }
+            //     } else {
+            //         // Listar todos os produtos
+            //         const version = await query({
+            //             query: "SELECT * FROM grace_version",
+            //         });
+            //         res.status(200).json({ version });
+            //     }
+            //     break;
 
-            // case "POST":
-            //   const postUserName = req.body.product_name;
-            //   const addProducts = await query({
-            //     query: "INSERT INTO products (product_name) VALUES (?)",
-            //     values: [postUserName],
-            //   });
-            //   const product = {
-            //     product_id: addProducts.insertId,
-            //     product_name: productName,
-            //   };
-            //   res.status(200).json({ response: { message: "success", product } });
-            //   break;
+            case "POST":
+              const post = req.body.post;
+              const postUser = req.body.user;
+              const postDate = req.body.data;
+
+              const getRegistroByDate = await query({
+                query: "SELECT * FROM grace_post WHERE id_user = ? and data = ?",
+                values: [postUser,postDate],
+            });
+            if (getRegistroByDate.length > 2) {
+                res.status(404).json({ resposta: "Já foi cadatrado mensagem nessa data!" });
+                return;
+            }
+              const addProducts = await query({
+                query: "INSERT INTO grace_post (post, id_user, data) VALUES (?,?,?)",
+                values: [post,postUser,postDate],
+              });
+              const product = {
+                post_id: addProducts.insertId,
+                //product_name: post,
+              };
+              res.status(200).json({id_inserido: addProducts.insertId,  });
+              break;
 
             case "PUT":
                 const versionId = req.body.id;
