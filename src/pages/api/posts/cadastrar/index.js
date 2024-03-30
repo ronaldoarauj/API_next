@@ -83,7 +83,7 @@ export default async function handler(req, res) {
                 values: [postUser,postDate],
             });
             if (getRegistroByDate.length > 2) {
-                res.status(203).json({resposta: "Já foi cadatrado mensagem nessa data!"});
+                res.status(203).json({resposta:"Já foi cadatrado mensagem nessa data!"});
                 return;
             }
               const addProducts = await query({
