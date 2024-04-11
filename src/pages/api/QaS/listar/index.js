@@ -2,6 +2,7 @@ import { query } from "@/lib/db";
 import jwt from "jsonwebtoken";
 
 
+
 // Função para validar o token
 const validateToken = (token) => {
     try {
@@ -31,7 +32,8 @@ const validateToken = (token) => {
 export default async function handler(req, res) {
     try {
         // Configurar o cabeçalho de Cache-Control
-        res.setHeader('Content-Type', 'text/html; charset=UTF-8','Cache-Control', 's-maxage=10, stale-while-revalidate');
+        res.charset = 'utf-8',
+        res.setHeader('Content-Type', 'charset=utf-8','Cache-Control', 's-maxage=10, stale-while-revalidate');
 
         // Verifica se o token Bearer está presente no cabeçalho da requisição
         const authorizationHeader = req.headers.authorization;
@@ -61,12 +63,12 @@ export default async function handler(req, res) {
                         });                      
                 
 
-
+                        var utf8 = require('utf8');
                     const formattedQA = qA.map((item) => ({
                         id: item.id,
-                        perguntas: item.perguntas,
-                        respostas: item.respostas,
-                        resposta_correta: item.resposta_correta,
+                        perguntas: utf8.decode(item.perguntas),
+                        respostas: utf8.decode(item.respostas),
+                        resposta_correta: utf8.decode(item.resposta_correta),
                     }));
                     if (qA.length === 0) {
                         res.status(404).json({ response: "User not found" });
