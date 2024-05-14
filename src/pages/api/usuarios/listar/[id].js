@@ -51,7 +51,8 @@ export default async function handler(req, res) {
                     console.log(userId);
                     if (userId != "null" && userId !== "undefined") {
                         var user = await query({
-                            query: "SELECT id, name, email, status, score FROM grace_user ORDER BY score DESC",
+                            //query: "SELECT id, name, email, status, score FROM grace_user ORDER BY score DESC",
+                            query: "SELECT id, name, email, status, quiz_score, graca_score FROM grace_user WHERE id = ?  ORDER BY quiz_score DESC",
                             values: [userId],
                         });
                     } else {
@@ -64,7 +65,8 @@ export default async function handler(req, res) {
                         name: item.name,
                         email: item.email,
                         status: item.status,
-                        score: item.score
+                        quizScore: item.quiz_score,
+                        gracaScore: item.graca_score
                     }));
 
                     //console.log(item.id);

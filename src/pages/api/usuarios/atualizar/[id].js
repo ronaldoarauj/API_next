@@ -47,10 +47,11 @@ export default async function handler(req, res) {
                 const userName = req.body.name;
                 const userEmail = req.body.email;
                 const userStatus = req.body.status;
-                const userScore = req.body.score;
+                const userQuizScore = req.body.quizScore || null; // Set to null if not provided
+                const userGracaScore = req.body.gracaScore || null;
 
                 if (userId) {
-                    // Buscar um produto por ID
+                    // Buscar por ID
                     const user = await query({
                         query: "SELECT id FROM grace_user WHERE id = ?",
                         values: [userId],
@@ -60,11 +61,49 @@ export default async function handler(req, res) {
                         res.status(404).json({ error: "user not found" });
                     } else {
 
+                        // Construct update query with optional fields
+                        let updateQuery = "UPDATE grace_user SET ";
+                        let values = [];
+
+                        if (userName) {
+                            updateQuery += "name = ?, ";
+                            values.push(userName);
+                        }
+                        if (userEmail) {
+                            updateQuery += "email = ?, ";
+                            values.push(userEmail);
+                        }
+                        if (userQuizScore) {
+                            updateQuery += "quiz_score = ?, ";
+                            values.push(userQuizScore);
+                        }
+                        if (userGracaScore) {
+                            updateQuery += "graca_score = ?, ";
+                            values.push(userGracaScore);
+                        }
+                        if (userStatus) {
+                            updateQuery += "status = ? ";
+                            values.push(userStatus);
+                        }
+                        // updateQuery += "quiz_score = ?, graca_score = ? "; // Always include these fields
+                        // values.push(userQuizScore, userGracaScore);
+                        updateQuery += "WHERE id = ?";
+                        values.push(userId);
+
+                        //console.log(updateQuery);
+
+                        // const updateUser = await query({
+                        //     query: "UPDATE grace_user SET name = ?, email = ?, status = ?, quiz_score = ?, graca_score = ? WHERE id = ?",
+                        //     values: [userName, userEmail, userStatus, userQuizScore, userGracaScore, userId],
+                        // });
+
                         const updateUser = await query({
-                            query: "UPDATE grace_user SET name = ?, email = ?, status = ?, score = ? WHERE id = ?",
-                            values: [userName, userEmail, userStatus, userScore, userId],
-                        });
+                            query: updateQuery,
+                            values: values,
+                          });
+
                         console.log(updateUser);
+
                         const resUser = {
                             id: userId,
                             name: userName,
