@@ -1,140 +1,91 @@
 import { query } from "@/lib/db";
+import jwt from "jsonwebtoken";
+
+
+// Função para validar o token
+const validateToken = (token) => {
+    try {
+        // Verifique o token usando a chave secreta (que deve ser a mesma usada para gerar o token)
+        const secret = process.env.SECRET_API_KEY_JWT;
+        const decoded = jwt.verify(token, secret);
+
+        // Se a verificação for bem-sucedida, o 'decoded' conterá os dados do usuário
+        return decoded;
+    } catch (error) {
+        // Se houver um erro (por exemplo, token inválido ou expirado), trate-o aqui
+        console.error('Erro ao validar o token:', error.message);
+        return null;
+    }
+};
 
 export default async function handler(req, res) {
-  try {
-    // Configurar o cabeçalho de Cache-Control
-    //res.setHeader('Cache-Control', 's-maxage=10, stale-while-revalidate');
 
-    switch (req.method) {
-      case "GET":
-        if (req.query.id) {
-          // Buscar um produto por ID
-          const userId = req.query.id;
-          const user = await query({
-            query: "SELECT * FROM grace_user WHERE id = ?",
-            values: [userId],
-          });
-          if (user.length === 0) {
-            res.status(404).json({ error: "Product not found" });
-          } else {
-            res.status(200).json({ user: user[0] });
-          }
-        } else {
-          // Listar todos os produtos
-          const users = await query({
-            query: "SELECT id, name, email, status, avatar FROM grace_user",
-          });
-          // Converte os avatares de buffer para base64
-          const usersWithBase64Avatar = users.map(user => {
-            if (Buffer.isBuffer(user.avatar)) {
-              return {
-                ...user,
-                avatar: Buffer.from(user.avatar, 'base64').toString(),
-              };
-            }
-            return user;
-          });
-
-          res.status(200).json({ users: usersWithBase64Avatar });
-        }
-        break;
-
-      case "POST":
-        const postUserName = req.body.product_name;
-        const addProducts = await query({
-          query: "INSERT INTO products (product_name) VALUES (?)",
-          values: [postUserName],
-        });
-        const product = {
-          product_id: addProducts.insertId,
-          product_name: productName,
-        };
-        res.status(200).json({ response: { message: "success", product } });
-        break;
-
-      case "PUT":
-        const userId = req.body.id;
-        const userName = req.body.name;
-        const userImage = req.body.image;
-
-        try {
-          // Coletar os dados do corpo da requisição
-          const data = req.body;
-
-          // Fazer um POST para a outra API
-          const response = await fetch('http://sinforme.com.br/testeupload.php', {
-            method: 'POST',
-            // headers: {
-            //   'Content-Type': 'application/json',
-            //   // Inclua outros headers se necessário
-            // },
-            body: JSON.stringify(data)
-          });
-
-          // Verificar a resposta da outra API
-          if (!response.ok) {
-            const errorText = await response.text(); // obter a mensagem de erro da resposta
-            res.status(response.status).json({ message: `Erro na outra API: ${errorText}` });
-            return; // garantir que não continuaremos após enviar a resposta
-          }
-
-          const result = await response.json();
-
-          // Retornar a resposta da outra API
-          res.status(200).json(result);
-        } catch (error) {
-          // Tratar erros
-          res.status(500).json({ message: error.message });
-        }
-        //LOG
-        console.log('Received PUT request. User ID:', userId, 'Name:', userName);
-
-        //const imageBase64 = Buffer.from(userImage, 'binary').toString('base64');
-
-        // // Logs adicionais para depurar
-        // console.log('Received PUT request. User ID:', userId, 'Name:', userName);
-        // console.log('Received image:', userImage);
-
-        // // Verifica se userImage já está em Base64 ou se precisa ser convertido
-        // const isBase64 = /^data:image\/\w+;base64,/.test(userImage);
-        // console.log('Is image already in Base64?');
-
-        // let imageBase64;
-        // if (isBase64) {
-        //   imageBase64 = userImage; // Se já está em Base64, não precisa converter novamente
-        // } else {
-        //   // Se não estiver em Base64, converte
-        //   imageBase64 = Buffer.from(userImage, 'binary').toString('base64');
-        //   console.log('Converted image to Base64:', imageBase64);
-        // }
-
-        const updateUsers = await query({
-          query: "UPDATE grace_user SET name = ?, avatar = ? WHERE id = ?",
-          values: [userName, userImage, userId],
-        });
-
-        console.log('Database update successful.');
-
-        const updateUser = {
-          id: userId,
-          name: userName,
-        };
-        res.status(200).json({ response: { message: "success", user: updateUser } });
-        break;
-
-      case "DELETE":
-        const productIdToDelete = req.body.product_id;
-        const deleteProducts = await query({
-          query: "DELETE FROM products WHERE product_id = ?",
-          values: [productIdToDelete],
-        });
-        res.status(200).json({ response: { message: "success", product_id: productIdToDelete } });
-        break;
-
-      default:
-        res.status(405).json({ error: "Method not allowed" });
+    // Verifica se o token Bearer está presente no cabeçalho da requisição
+    const authorizationHeader = req.headers.authorization;
+    if (!authorizationHeader || !authorizationHeader.startsWith('Bearer ')) {
+        res.status(401).json({ resposta: 'Unauthorized - Bearer token missing' });
+        return;
     }
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
+
+    // Extrai o token Bearer da string
+    const token = authorizationHeader.substring(7);
+    const userData = validateToken(token);
+
+    // Verifica se o token é válido (neste exemplo, verifica se é 'AlterPass456')
+    if (!userData) {
+        res.status(401).json({ resposta: 'Unauthorized - Token não autorizado' });
+        return;
+    }
+
+    if (req.method === 'PUT') {
+        try {
+            // Coletar os dados do corpo da requisição
+            const data = req.body;
+            const userId = req.body.id;
+            const userName = req.body.name;
+            //const userImage = req.body.image;
+            // Fazer um POST para a outra API
+            const response = await fetch('http://sinforme.com.br/testeupload.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    // Inclua outros headers se necessário
+                },
+                body: JSON.stringify(data)
+            });
+
+            // Verificar a resposta da outra API
+            if (!response.ok) {
+                const errorText = await response.text(); // obter a mensagem de erro da resposta
+                res.status(response.status).json({ message: `Erro na outra API: ${errorText}` });
+                return; // garantir que não continuaremos após enviar a resposta
+            }
+
+            const result = await response.json();
+
+            const updateUsers = await query({
+                query: "UPDATE grace_user SET name = ?, avatar = ? WHERE id = ?",
+                values: [userName, userId+'.jpg', userId],
+              });
+      
+            //   console.log('Database update successful.');
+      
+              const updateUser = {
+                id: userId,
+                name: userName,
+              };
+            //   res.status(200).json({ response: { message: "success", user: updateUser } });
+             
+
+            // Retornar a resposta da outra API
+            res.status(200).json({ response: { message: "success", user: updateUser } });
+        } catch (error) {
+            // Tratar erros
+            res.status(500).json({ message: error.message });
+        }
+    } else {
+        // Método não permitido
+        res.setHeader('Allow', ['POST']);
+        res.status(405).end(`Método ${req.method} não permitido`);
+    }
 }
