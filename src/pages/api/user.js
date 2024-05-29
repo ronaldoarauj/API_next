@@ -3,7 +3,7 @@ import { query } from "@/lib/db";
 export default async function handler(req, res) {
   try {
     // Configurar o cabeçalho de Cache-Control
-    res.setHeader('Cache-Control', 's-maxage=10, stale-while-revalidate');
+    //res.setHeader('Cache-Control', 's-maxage=10, stale-while-revalidate');
 
     switch (req.method) {
       case "GET":
@@ -56,6 +56,36 @@ export default async function handler(req, res) {
         const userId = req.body.id;
         const userName = req.body.name;
         const userImage = req.body.image;
+
+        try {
+          // Coletar os dados do corpo da requisição
+          const data = req.body;
+
+          // Fazer um POST para a outra API
+          const response = await fetch('http://sinforme.com.br/testeupload.php', {
+            method: 'POST',
+            // headers: {
+            //   'Content-Type': 'application/json',
+            //   // Inclua outros headers se necessário
+            // },
+            body: JSON.stringify(data)
+          });
+
+          // Verificar a resposta da outra API
+          if (!response.ok) {
+            const errorText = await response.text(); // obter a mensagem de erro da resposta
+            res.status(response.status).json({ message: `Erro na outra API: ${errorText}` });
+            return; // garantir que não continuaremos após enviar a resposta
+          }
+
+          const result = await response.json();
+
+          // Retornar a resposta da outra API
+          res.status(200).json(result);
+        } catch (error) {
+          // Tratar erros
+          res.status(500).json({ message: error.message });
+        }
         //LOG
         console.log('Received PUT request. User ID:', userId, 'Name:', userName);
 
