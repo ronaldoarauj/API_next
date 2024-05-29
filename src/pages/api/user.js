@@ -29,13 +29,13 @@ export default async function handler(req, res) {
 
     // Extrai o token Bearer da string
     const token = authorizationHeader.substring(7);
-    const userData = validateToken(token);
+    // const userData = validateToken(token);
 
-    // Verifica se o token é válido (neste exemplo, verifica se é 'AlterPass456')
-    if (!userData) {
-        res.status(401).json({ resposta: 'Unauthorized - Token não autorizado' });
-        return;
-    }
+    // // Verifica se o token é válido (neste exemplo, verifica se é 'AlterPass456')
+    // if (!userData) {
+    //     res.status(401).json({ resposta: 'Unauthorized - Token não autorizado' });
+    //     return;
+    // }
 
     if (req.method === 'PUT') {
         try {
