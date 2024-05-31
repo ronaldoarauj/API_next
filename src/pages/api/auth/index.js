@@ -82,10 +82,10 @@ export default async function handler(req, res) {
             };
 
             const token = jwt.sign(payload, secret, {
-              expiresIn: "1h", noTimestamp: true
+              expiresIn: "90d", noTimestamp: true
             });
             const refreshToken = jwt.sign(payload, secret, {
-              expiresIn: "30d", noTimestamp: true
+              expiresIn: "1y", noTimestamp: true
             });
             //console.log(token);
             // const updateVersion = {
