@@ -43,8 +43,8 @@ export default async function handler(req, res) {
             const data = req.body;
             const email = req.body.email;
             // Fazer um POST para a outra API
-            console.log(data);
-            const response = await fetch('https://sinforme.com.br/grace_API/usuarios/enviar', {
+            //console.log(data);
+            const response = await fetch('http://sinforme.com.br/grace_API/usuarios/enviar', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -62,12 +62,8 @@ export default async function handler(req, res) {
 
             const result = await response.json();
 
-      
- 
-             
-
             // Retornar a resposta da outra API
-            res.status(200).json({ response: { id_inserido: email } });
+            res.status(200).json({ id_inserido: email });
         } catch (error) {
             // Tratar erros
             res.status(500).json({ message: error.message });
