@@ -56,7 +56,7 @@ export default async function handler(req, res) {
                     values: [userEmail],
                 });
 
-                console.log(userEmail);
+                //console.log(userEmail);
                 
                 if (getRegistroByUser.length != 1) {
                     res.status(203).json({ resposta: "Erro cadastro não existente!" });
