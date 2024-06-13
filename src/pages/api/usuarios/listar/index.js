@@ -46,7 +46,7 @@ export default async function handler(req, res) {
 
 
                 var user = await query({
-                    query: "SELECT  id, name, email, status, quiz_score, graca_score FROM grace_user ORDER BY quiz_score DESC",
+                    query: "SELECT  id, name, email, status, quiz_score, graca_score FROM grace_user ORDER BY quiz_score DESC LIMIT 10",
                     //values: [userId],
                 });
 
