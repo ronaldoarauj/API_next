@@ -39,7 +39,7 @@ export default async function Produto(req, res) {
           // const prexis = 'data:image/jpeg;base64,';
           // const imagefinal = prexis+image;
           
-          const imagefinal = image ? image : '';
+          const imagefinal = image ?? "";
 
           res.status(200).json({
             user: {
