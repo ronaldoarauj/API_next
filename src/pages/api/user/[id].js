@@ -38,7 +38,8 @@ export default async function Produto(req, res) {
           const image = Buffer.from(avatar, 'base64').toString();
           // const prexis = 'data:image/jpeg;base64,';
           // const imagefinal = prexis+image;
-          const imagefinal = image;
+          
+          const imagefinal = image ? image : '';
 
           res.status(200).json({
             user: {
