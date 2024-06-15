@@ -32,17 +32,13 @@ export default async function Produto(req, res) {
           res.status(404).json({ error: "User not found" });
         } else {
           const { name, email, status, avatar } = user[0];
-          //const image = Buffer.from(avatar).toString('base64');
+          const avatarFinal = avatar ?? ""; 
 
           // Decode em Base64 duas vezes
-          const image = Buffer.from(avatar, 'base64').toString();
+          const image = Buffer.from(avatarFinal, 'base64').toString();
           // const prexis = 'data:image/jpeg;base64,';
           // const imagefinal = prexis+image;
-          var imagefinal = '';
-          if (image){
-            imagefinal = image ;
-          }
-          
+          const imagefinal = image;
 
           res.status(200).json({
             user: {
