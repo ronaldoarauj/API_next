@@ -81,7 +81,7 @@ export default async function handler(req, res) {
 
                 const postId = req.body.id;
                 const postDescricao = req.body.descricao;
-                const postDescricaoHtml = '<p>A&ccedil;&otilde;es que estamos comprando para Hoje:</p><p>' + postDescricao + '</p><p>&nbsp;</p><p>DISCLAIMER. O conte&uacute;do apresentado nesta pagina n&atilde;o trata de recomenda&ccedil;&atilde;o, indica&ccedil;&atilde;o e/ou aconselhamento de investimento, sendo &uacute;nica e exclusiva responsabilidade do investidor a tomada de decis&atilde;o. O objetivo desta pagina &eacute; compartilhar informa&ccedil;&otilde;es sobre nosso projeto, que n&atilde;o deve ser replicado sem orienta&ccedil;&atilde;o profissional, pois, existe risco de perda de capital.</p><p>&nbsp;</p>'
+                const postDescricaoHtml = '<p>A&ccedil;&otilde;es que estamos comprando para Hoje:</p><p>' + postDescricao + '</p><p>&nbsp;</p><p>DISCLAIMER. O conte&uacute;do apresentado nesta pagina n&atilde;o trata de recomenda&ccedil;&atilde;o, indica&ccedil;&atilde;o e/ou aconselhamento de investimento, sendo &uacute;nica e exclusiva responsabilidade do investidor a tomada de decis&atilde;o. O objetivo desta pagina &eacute; compartilhar informa&ccedil;&otilde;es sobre nosso projeto, que n&atilde;o deve ser replicado sem orienta&ccedil;&atilde;o profissional, pois, existe risco de perda de capital.</p><p>&nbsp;</p><p><em><strong>Whastapp</strong></em>:&nbsp;<a href="https://chat.whatsapp.com/Di4xgRyrqp29OYUiS1Wc7x">https://chat.whatsapp.com/Di4xgRyrqp29OYUiS1Wc7x</a></p>'
                 //LOG
                 // console.log('Received PUT request. User ID:', postId, 'postDescricao:', postDescricao);
 
