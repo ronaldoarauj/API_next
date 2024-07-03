@@ -46,7 +46,7 @@ export default async function handler(req, res) {
 
 
                 var user = await query({
-                    query: "SELECT  id, name, email, status, quiz_score, graca_score FROM grace_user ORDER BY quiz_score DESC LIMIT 10",
+                    query: "SELECT  * FROM grace_user ORDER BY quiz_score DESC LIMIT 10",
                     //values: [userId],
                 });
 
@@ -56,7 +56,8 @@ export default async function handler(req, res) {
                     email: item.email,
                     status: item.status,
                     quizScore: item.quiz_score,
-                    gracaScore: item.graca_score
+                    gracaScore: item.graca_score,
+                    avatar: item.avatar
                 }));
 
                 //console.log(item.id);
