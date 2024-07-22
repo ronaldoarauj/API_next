@@ -21,13 +21,10 @@ export default async function handler(req, res) {
 
             // Prepare the response data to include the API JSON
             const responseData = {
-                message: "success",
-                verseData: {
                     book: apiData.book,
                     chapter: apiData.chapter,
                     number: apiData.number,
-                    text: apiData.text,
-                },
+                    text: apiData.text,          
             };
 
             // Uncomment and modify if you actually want to update the user in the database
