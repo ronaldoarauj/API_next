@@ -39,9 +39,6 @@ export default async function handler(req, res) {
                 });
             }
 
-
-            // console.log('Database update successful.');
-
             res.status(200).json(responseData);
         } catch (error) {
             console.log(error);

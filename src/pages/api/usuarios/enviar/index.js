@@ -28,8 +28,8 @@ export default async function handler(req, res) {
     // }
 
     // Extrai o token Bearer da string
-    // const token = authorizationHeader.substring(7);
-    // const userData = validateToken(token);
+    const token = authorizationHeader.substring(7);
+    const userData = validateToken(token);
 
     // // Verifica se o token é válido (neste exemplo, verifica se é 'AlterPass456')
     // if (!userData) {
