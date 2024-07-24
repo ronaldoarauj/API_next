@@ -43,7 +43,7 @@ export default async function handler(req, res) {
             const data = req.body;
             const email = req.body.email;
             const dataTelegram = {
-                "chat_id": "351354199",
+                "chat_id": process.env.TOKEN_TELEGRAM,
                 "text": data,
                 "disable_notification": true
             };
