@@ -46,7 +46,7 @@ export default async function handler(req, res) {
         const token = authorizationHeader.substring(7);
         const userData = validateToken(token);
 
-        // Verifica se o token é válido (neste exemplo, verifica se é 'AlterPass456')
+        
         if (!userData) {
             res.status(401).json({ resposta: 'Unauthorized - Token não autorizado' });
             return;

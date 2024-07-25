@@ -15,7 +15,6 @@ export default async function handler(req, res) {
         // Extrai o token Bearer da string
         const token = authorizationHeader.substring(7);
 
-        // Verifica se o token é válido (neste exemplo, verifica se é 'AlterPass456')
         if (token !== process.env.TOKEN_USER) {
             res.status(401).json({ error: 'Unauthorized - Invalid Bearer token' });
             return;
