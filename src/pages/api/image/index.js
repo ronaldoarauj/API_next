@@ -19,24 +19,26 @@ const validateToken = (token) => {
 export default async function handler(req, res) {
 
     
-    const authorizationHeader = req.headers.authorization;
-    if (!authorizationHeader || !authorizationHeader.startsWith('Bearer ')) {
-        res.status(401).json({ resposta: 'Unauthorized - Bearer token missing' });
-        return;
-    }
-
-    
-    const token = authorizationHeader.substring(7);
-    const userData = validateToken(token);
-
-    
-    if (!userData) {
-        res.status(401).json({ resposta: 'Unauthorized - Token não autorizado' });
-        return;
-    }
-
     switch (req.method) {
         case "POST":
+
+        const authorizationHeader = req.headers.authorization;
+        if (!authorizationHeader || !authorizationHeader.startsWith('Bearer ')) {
+            res.status(401).json({ resposta: 'Unauthorized - Bearer token missing' });
+            return;
+        }
+    
+        
+        const token = authorizationHeader.substring(7);
+        const userData = validateToken(token);
+    
+        
+        if (!userData) {
+            res.status(401).json({ resposta: 'Unauthorized - Token não autorizado' });
+            return;
+        }
+
+        
             try {
                 // Coletar os dados do corpo da requisição
                 const data = req.body;
