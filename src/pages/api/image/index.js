@@ -79,7 +79,7 @@ export default async function handler(req, res) {
             try {
 
                 var getImage = await query({
-                    query: "SELECT * FROM grace_image  ORDER BY id DESC LIMIT 12",
+                    query: "SELECT * FROM grace_image where grupo = 'biblia'  ORDER BY id DESC LIMIT 12",
 
                 });
 
