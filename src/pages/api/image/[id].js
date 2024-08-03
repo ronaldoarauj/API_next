@@ -20,7 +20,7 @@ export default async function handler(req, res) {
 
 
     switch (req.method) {
-        case "POST":
+        case "PUT":
 
             const authorizationHeader = req.headers.authorization;
             if (!authorizationHeader || !authorizationHeader.startsWith('Bearer ')) {
@@ -41,11 +41,13 @@ export default async function handler(req, res) {
 
             try {
                 // Coletar os dados do corpo da requisição
+                const id = req.query.id;
                 const data = req.body;
                 const image = req.body.image;
                 const imageDescription = req.body.descricao;
                 const imageGroup = req.body.grupo;
                 const imageStatus = req.body.status;
+                const score = req.body.score;
                 //const userImage = req.body.image;
                 // Fazer um POST para a outra API
 
@@ -53,8 +55,8 @@ export default async function handler(req, res) {
                 const insertImages = await query({
                     // query: "UPDATE grace_user SET name = ?, avatar = ? WHERE id = ?",
                     // values: [userName, userId+'.jpg', userId],
-                    query: "INSERT INTO grace_image (image, descricao, grupo, status) VALUES (?,?,?,?)",
-                    values: [image, imageDescription, imageGroup, imageStatus],
+                    query: "UPDATE grace_image set score = ? WHERE id = ?",
+                    values: [score, id],
 
                 });
 
