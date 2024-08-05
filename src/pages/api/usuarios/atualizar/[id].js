@@ -49,6 +49,8 @@ export default async function handler(req, res) {
                 const userStatus = req.body.status;
                 const userQuizScore = req.body.quizScore || null; // Set to null if not provided
                 const userGracaScore = req.body.gracaScore || null;
+                const userSScore = req.body.sScore || null;
+                const userMScore = req.body.mScore || null;
 
                 if (userId) {
                     // Buscar por ID
@@ -80,6 +82,14 @@ export default async function handler(req, res) {
                         if (userGracaScore) {
                             updateQuery += "graca_score = ?, ";
                             values.push(userGracaScore);
+                        }
+                        if (userSScore) {
+                            updateQuery += "s_score = ?, ";
+                            values.push(userSScore);
+                        }
+                        if (userMScore) {
+                            updateQuery += "m_score = ?, ";
+                            values.push(userMScore);
                         }
                         if (userStatus) {
                             updateQuery += "status = ? ";
