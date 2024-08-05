@@ -6,7 +6,7 @@ import jwt from "jsonwebtoken";
 const validateToken = (token) => {
     try {
 
-        const secret = process.env.SECRET_API_KEY_JWT;
+        const secret = process.env.TOKEN_USER;
         const decoded = jwt.verify(token, secret);
 
         return decoded;
@@ -28,25 +28,18 @@ export default async function handler(req, res) {
                 return;
             }
 
-
+            // Extrai o token Bearer da string
             const token = authorizationHeader.substring(7);
-            const userData = validateToken(token);
 
-
-            if (!userData) {
-                res.status(401).json({ resposta: 'Unauthorized - Token não autorizado' });
+            if (token !== process.env.TOKEN_USER) {
+                res.status(401).json({ error: 'Unauthorized - Invalid Bearer token' });
                 return;
             }
-
 
             try {
                 // Coletar os dados do corpo da requisição
                 const id = req.query.id;
                 const data = req.body;
-                const image = req.body.image;
-                const imageDescription = req.body.descricao;
-                const imageGroup = req.body.grupo;
-                const imageStatus = req.body.status;
                 const score = req.body.score;
                 //const userImage = req.body.image;
                 // Fazer um POST para a outra API
@@ -102,7 +95,7 @@ export default async function handler(req, res) {
                         group = "top 10";
                         break;
                     case 7:
-                        group = "aleatorio"; 
+                        group = "aleatorio";
                         break;
                     default:
                         group = null;
