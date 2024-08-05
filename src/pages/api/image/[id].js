@@ -108,11 +108,11 @@ export default async function handler(req, res) {
                 let getImage;
                 if (group === "aleatorio") {
                     getImage = await query({
-                        query: "SELECT * FROM grace_image ORDER BY RAND() LIMIT 12",
+                        query: "SELECT * FROM grace_image ORDER BY RAND() LIMIT 30",
                     });
                 } else if (group === "top 10") {
                     getImage = await query({
-                        query: "SELECT * FROM grace_image ORDER BY RAND() LIMIT 10",
+                        query: "SELECT * FROM grace_image ORDER BY score DESC LIMIT 10",
                     });
                 } else if (group) {
                     getImage = await query({
