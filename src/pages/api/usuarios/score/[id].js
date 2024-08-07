@@ -44,8 +44,6 @@ export default async function handler(req, res) {
         switch (req.method) {
             case "GET":
                 if (req.query.id) {
-
-
                     // Buscar um produto por ID
                     //const scoreId = req.query.id;
                     const groupId = parseInt(req.query.id, 10); // Converter para número inteiro
@@ -60,7 +58,7 @@ export default async function handler(req, res) {
                             });
                         } else {
                             var score = await query({
-                                query: "SELECT  * FROM grace_user ORDER BY m_score, id DESC LIMIT 10",
+                                query: "SELECT  * FROM grace_user ORDER BY m_score DESC, id DESC LIMIT 10",
                             });
                         }
 
