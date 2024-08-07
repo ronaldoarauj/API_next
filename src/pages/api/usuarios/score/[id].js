@@ -55,12 +55,12 @@ export default async function handler(req, res) {
                         if (groupId == 1) {
                             var score = await query({
                                 //query: "SELECT id, name, email, status, score FROM grace_user ORDER BY score DESC",
-                                query: "SELECT  * FROM grace_user ORDER BY s_score DESC LIMIT 10",
+                                query: "SELECT  * FROM grace_user ORDER BY s_score DESC, id DESC LIMIT 10",
                                 //values: [userId],
                             });
                         } else {
                             var score = await query({
-                                query: "SELECT  * FROM grace_user ORDER BY m_score DESC LIMIT 10",
+                                query: "SELECT  * FROM grace_user ORDER BY m_score, id DESC LIMIT 10",
                             });
                         }
 
