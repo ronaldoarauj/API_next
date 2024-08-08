@@ -56,9 +56,16 @@ export default async function handler(req, res) {
                                 query: "SELECT  * FROM grace_user ORDER BY s_score DESC, id DESC LIMIT 10",
                                 //values: [userId],
                             });
+
+                        } else if (groupId == 2){
+                            var score = await query({
+                                //query: "SELECT id, name, email, status, score FROM grace_user ORDER BY score DESC",
+                                query: "SELECT  * FROM grace_user ORDER BY m_score DESC, id DESC LIMIT 10",
+                                //values: [userId],
+                            });
                         } else {
                             var score = await query({
-                                query: "SELECT  * FROM grace_user ORDER BY m_score DESC, id DESC LIMIT 10",
+                                query: "SELECT  * FROM grace_user ORDER BY s_score DESC, id DESC LIMIT 3",
                             });
                         }
 
