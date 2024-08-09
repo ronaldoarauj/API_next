@@ -65,7 +65,7 @@ export default async function handler(req, res) {
                             });
                         } else {
                             var score = await query({
-                                query: "SELECT  * FROM grace_user ORDER BY s_score DESC, id DESC LIMIT 3",
+                                query: "SELECT  * FROM grace_user ORDER BY s_score DESC, id DESC LIMIT 10",
                             });
                         }
 
