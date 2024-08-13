@@ -114,6 +114,14 @@ export default async function handler(req, res) {
                     getImage = await query({
                         query: "SELECT * FROM grace_image ORDER BY score DESC LIMIT 10",
                     });
+                } else if (group === "semana") {
+                    const diasDaSemana = ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"];
+                    const hoje = new Date();
+                    const diaDaSemana = diasDaSemana[hoje.getDay()];
+                    getImage = await query({
+                        query: "SELECT * FROM grace_image where grupo = ? and descricao LIKE ? ORDER BY score DESC LIMIT 20",
+                        values: [group, `%${diaDaSemana}%`],
+                    });
                 } else if (group) {
                     getImage = await query({
                         query: "SELECT * FROM grace_image where grupo = ? ORDER BY id DESC LIMIT 12",
