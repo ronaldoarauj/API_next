@@ -119,7 +119,7 @@ export default async function handler(req, res) {
                     const hoje = new Date();
                     const diaDaSemana = diasDaSemana[hoje.getDay()];
                     getImage = await query({
-                        query: "SELECT * FROM grace_image where grupo = ? and descricao LIKE ? ORDER BY score DESC LIMIT 20",
+                        query: "SELECT * FROM grace_image where grupo = ? and descricao LIKE ? ORDER BY RAND() DESC LIMIT 20",
                         values: [group, `%${diaDaSemana}%`],
                     });
                 } else if (group) {
