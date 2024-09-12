@@ -6,14 +6,12 @@ import jwt from "jsonwebtoken";
 // Função para validar o token
 const validateToken = (token) => {
     try {
-        // Verifique o token usando a chave secreta (que deve ser a mesma usada para gerar o token)
-        const secret = process.env.SECRET_API_KEY_JWT;
+
+        const secret = process.env.TOKEN_USER;
         const decoded = jwt.verify(token, secret);
 
-        // Se a verificação for bem-sucedida, o 'decoded' conterá os dados do usuário
         return decoded;
     } catch (error) {
-        // Se houver um erro (por exemplo, token inválido ou expirado), trate-o aqui
         console.error('Erro ao validar o token:', error.message);
         return null;
     }
@@ -34,11 +32,9 @@ export default async function handler(req, res) {
 
         // Extrai o token Bearer da string
         const token = authorizationHeader.substring(7);
-        const userData = validateToken(token);
 
-
-        if (!userData) {
-            res.status(401).json({ resposta: 'Unauthorized - Token não autorizado' });
+        if (token !== process.env.TOKEN_USER) {
+            res.status(401).json({ error: 'Unauthorized - Invalid Bearer token' });
             return;
         }
 
