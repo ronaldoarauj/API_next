@@ -19,16 +19,6 @@ const validateToken = (token) => {
     }
 };
 
-
-
-
-
-//   if (userData) {
-//     console.log('Token válido! Dados do usuário:', userData);
-//   } else {
-//     console.log('Token inválido ou expirado.');
-//   }
-
 export default async function handler(req, res) {
     try {
         // Configurar o cabeçalho de Cache-Control
@@ -56,12 +46,11 @@ export default async function handler(req, res) {
 
             case "GET":
 
-                var qA = await query({
-                    query: "SELECT * FROM grace_game  ORDER BY RAND() LIMIT 1",
+                var game = await query({
+                    query: "SELECT * FROM grace_game ORDER BY RAND() LIMIT 1",
 
                 });
 
-                var utf8 = require('utf8');
                 const formattedGame = game.map((item) => ({
                     id: item.id,
                     texto: item.texto,
