@@ -40,6 +40,41 @@ export default async function handler(req, res) {
 
         switch (req.method) {
 
+            case "POST":
+        
+                try {
+                    // Coletar os dados do corpo da requisição
+                    const data = req.body;
+                    const text = req.body.texto;
+
+                    //const userImage = req.body.image;
+                    // Fazer um POST para a outra API
+    
+    
+                    const insertGames = await query({
+                        // query: "UPDATE grace_user SET name = ?, avatar = ? WHERE id = ?",
+                        // values: [userName, userId+'.jpg', userId],
+                        query: "INSERT INTO grace_game (texto) VALUES (?)",
+                        values: [text],
+    
+                    });
+    
+                    //   console.log('Database update successful.');
+    
+                    const insertGame = {
+                        data,
+                    };
+                    //   res.status(200).json({ response: { message: "success", user: updateUser } });
+    
+    
+                    // Retornar a resposta da outra API
+                    res.status(200).json({ response: { message: "success", game: insertGame } });
+                } catch (error) {
+                    // Tratar erros
+                    res.status(500).json({ message: error.message });
+                }
+                break;
+
             case "GET":
 
                 var game = await query({
