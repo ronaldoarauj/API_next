@@ -51,6 +51,7 @@ export default async function handler(req, res) {
                 const userGracaScore = req.body.gracaScore || null;
                 const userSScore = req.body.sScore || null;
                 const userMScore = req.body.mScore || null;
+                const userGameScore = req.body.gameScore || null;
 
                 if (userId) {
                     // Buscar por ID
@@ -90,6 +91,10 @@ export default async function handler(req, res) {
                         if (userMScore) {
                             updateQuery += "m_score = ?, ";
                             values.push(userMScore);
+                        }
+                        if (userGameScore) {
+                            updateQuery += "game_score = ?, ";
+                            values.push(userGameScore);
                         }
                         if (userStatus) {
                             updateQuery += "status = ? ";
