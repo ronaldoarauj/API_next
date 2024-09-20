@@ -69,6 +69,7 @@ export default async function handler(req, res) {
                         gracaScore: item.graca_score,
                         sScore: item.s_score,
                         mScore: item.m_score,
+                        gameScore: item.game_score,
                         avatar: item.avatar
                     }));
 
