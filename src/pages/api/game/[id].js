@@ -82,10 +82,14 @@ export default async function handler(req, res) {
                     values: [gameId],
 
                 });
+                var lastIdResult = await query({
+                    query: "SELECT MAX(id) AS lastId FROM grace_game",
+                });
 
                 const formattedGame = game.map((item) => ({
                     id: item.id,
                     texto: item.texto,
+                    ultimo: lastIdResult[0].lastId
                 }));
                 if (game.length === 0) {
                     res.status(404).json({ response: "User not found" });
