@@ -40,7 +40,7 @@ export default async function handler(req, res) {
             const response = await fetch(`https://www.abibliadigital.com.br/api/verses/${version}/${abbrev}/${chapter}`, {
                 method: 'GET',
                 headers: {
-                    'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.${token}.ZYb3lkPEM3RVj7eDtlH-B8rm6bCUs-2V66lwsSVvH0Q`, 
+                    'Authorization': `Bearer${token}`, 
                 },
             });
 
