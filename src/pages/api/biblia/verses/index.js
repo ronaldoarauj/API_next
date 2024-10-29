@@ -24,7 +24,7 @@ export default async function handler(req, res) {
         const token = authorizationHeader.substring(7);
 
         if (token !== process.env.TOKEN_USER_BIBLE) {
-            res.status(401).json({ error: `Unauthorized - Invalid Bearer token ${token}` });
+            res.status(401).json({ error: 'Unauthorized - Invalid Bearer token' });
             return;
         }
 
@@ -40,7 +40,7 @@ export default async function handler(req, res) {
             const response = await fetch(`https://www.abibliadigital.com.br/api/verses/${version}/${abbrev}/${chapter}`, {
                 method: 'GET',
                 headers: {
-                    'Authorization': `Bearer${token}`, 
+                    'Authorization': `Bearer ${token}`, 
                 },
             });
 
