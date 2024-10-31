@@ -2,12 +2,28 @@ import { query } from "@/lib/db"; // Assuming this interacts with your database
 import jwt from "jsonwebtoken";
 
 export default async function handler(req, res) {
+
+    const authorizationHeader = req.headers.authorization;
+    if (!authorizationHeader || !authorizationHeader.startsWith('Bearer ')) {
+        res.status(401).json({ error: 'Unauthorized - Bearer token missing' });
+        return;
+    }
+
+    // Extrai o token Bearer da string
+    const token = authorizationHeader.substring(7);
+
+    if (token !== process.env.TOKEN_USER_BIBLE) {
+        res.status(401).json({ error: 'Unauthorized - Invalid Bearer token' });
+        return;
+    }
+
     if (req.method === 'GET') {
         try {
             const response = await fetch('https://www.abibliadigital.com.br/api/verses/nvi/random', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json', // This might not be needed for the external API
+                    'Authorization': `Bearer ${token}`,
                 },
             });
 
