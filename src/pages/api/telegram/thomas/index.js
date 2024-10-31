@@ -2,7 +2,8 @@
 
 export default async function handler(req, res) {
     const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
-    const TELEGRAM_API_URL = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/getUpdates`;
+    const { offset } = req.query;
+    const TELEGRAM_API_URL = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/getUpdates?offset=${offset}`;
 
     try {
         const response = await fetch(TELEGRAM_API_URL);
@@ -23,6 +24,7 @@ export default async function handler(req, res) {
                 .map(update => {
                     const { message } = update;
                     return {
+                        update_id: update.update_id,
                         message_id: message.message_id,
                         text: message.text || '', // Inclui o texto, se existir
                         from: {
