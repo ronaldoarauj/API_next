@@ -1,3 +1,4 @@
+import { query } from "@/lib/db";
 import jwt from "jsonwebtoken";
 
 // const validateToken = (token) => {
@@ -52,6 +53,75 @@ export default async function handler(req, res) {
             }
 
             const apiData = await response.json();
+
+            if (Array.isArray(apiData.verses)) {
+                //console.log(apiData.verses);
+                const insertPromises = apiData.verses.map(verse => {
+                    return insertVerse(verse);
+                  });
+                // const insertPromises = apiData.map(verse => {
+                //   return insertVerse(verse);
+                // });
+            
+                await Promise.all(insertPromises);
+            
+                res.status(200).json(apiData);
+              } else {
+                // ... tratamento caso apiData não seja um array ...
+              }
+
+              async function insertVerse(verseData) {
+                try {
+                    console.log('aqui');
+                  //const client = await pool.connect();
+                  try {
+                    // Query SQL ajustada para inserir todos os campos do versículo
+                    const checkQuery = 'SELECT * FROM grace_biblia WHERE abbrev_pt = ? AND chapter = ? AND number = ?';
+                    const checkValues = [verseData.book.abbrev.pt, verseData.chapter, verseData.number];
+                    const checkResult = await query(checkQuery, checkValues);
+              
+                    if (checkResult.rows.length === 0) {
+                      // Se o versículo não existe, insere
+                      const insertQuery = `
+                        INSERT INTO grace_biblia (
+                          abbrev_pt, abbrev_en, name, author, "group", version, chapter, number, text
+                        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+                      `;
+                      const insertValues = [
+                        verseData.book.abbrev.pt,
+                        verseData.book.abbrev.en,
+                        verseData.book.name,
+                        verseData.book.author,
+                        verseData.book.group,
+                        verseData.book.version,
+                        verseData.chapter,
+                        verseData.number,
+                        verseData.text
+                      ];
+                      await query(insertQuery, insertValues);
+                    } else {
+                      console.log('Versículo já existe:', verseData);
+                    }
+                  } finally {
+                    client.release();
+                  }
+                } catch (error) {
+                  console.error('Erro ao inserir versículo:', error.message);
+                }
+            }
+
+            // // Uncomment and modify if you actually want to update the user in the database
+            // const getBible = await query({
+            //     query: "SELECT * FROM grace_biblia WHERE abbrev_pt = ? and chapter = ? and number = ?",
+            //     values: [apiData.book.abbrev.pt, apiData.chapter, apiData.number],
+            // });
+            // if (getBible.length === 0) {
+            //     const insertBible = await query({
+            //         query: "INSERT INTO grace_biblia (abbrev_pt, abbrev_en, name, author, `group`, version, chapter, number, text) VALUES (?,?,?,?,?,?,?,?,?)",
+            //         values: [apiData.book.abbrev.pt, apiData.book.abbrev.en, apiData.book.name, apiData.book.author, apiData.book.group, apiData.book.version, apiData.chapter, apiData.number, apiData.text],
+            //     });
+            // }
+
             res.status(200).json(apiData);
         } catch (error) {
             console.log(error);
