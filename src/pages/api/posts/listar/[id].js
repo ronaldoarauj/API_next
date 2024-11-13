@@ -69,7 +69,7 @@ export default async function handler(req, res) {
                     const formattedDate = new Date();
                     // Buscar um produto por ID
                     const postId = req.query.id;
-                    if (validarData(formattedDate, 2) != '23/11'){
+                    if (validarData(formattedDate, 2) != '28/11'){
                         var post = await query({
                             query: "SELECT * FROM grace_post WHERE id_user = ? ORDER BY 1 DESC LIMIT 5",
                             values: [postId],
