@@ -36,7 +36,7 @@ export default async function handler(req, res) {
             INNER JOIN grace_post p ON u.id = p.id_user WHERE p.data > ?
             GROUP BY u.id
             HAVING COUNT(p.id) > 0
-            ORDER BY u.id ASC limit 2
+            ORDER BY u.id ASC
             `,
             values: [formattedDate],
         });
@@ -81,7 +81,7 @@ export default async function handler(req, res) {
                 <td style='text-align: left;'>
                 <h1 style="color: #007bff; font-family: Arial, sans-serif; margin: 0;">Olá ${userName},</h1>
                 <p style="font-size: 16px; line-height: 1.6; font-family: Arial, sans-serif; color: #333333;">
-                    Neste Dia de Ação de Graças, queremos expressar nossa gratidão a você. Agradecemos por fazer parte do nossa App.
+                    Neste Dia de Ação de Graças, queremos expressar nossa gratidão a você. Agradecemos por fazer parte do nosso App.
                 </p>            
                 <p style="font-size: 16px; line-height: 1.6; font-family: Arial, sans-serif; color: #333333;">Seus registros de gratidão:</p>
                 <ul style="padding-left: 20px; font-family: Arial, sans-serif; color: #333333;">
