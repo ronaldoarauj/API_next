@@ -1,0 +1,157 @@
+import { query } from "../../../lib/db2";
+
+export default async function handler(req, res) {
+    try {
+        // Configurar o cabeçalho de Cache-Control
+        res.setHeader('Cache-Control', 's-maxage=10, stale-while-revalidate');
+
+        // Verifica se o token Bearer está presente no cabeçalho da requisição
+        const authorizationHeader = req.headers.authorization;
+        if (!authorizationHeader || !authorizationHeader.startsWith('Bearer ')) {
+            res.status(401).json({ error: 'Unauthorized - Bearer token missing' });
+            return;
+        }
+
+        // Extrai o token Bearer da string
+        const token = authorizationHeader.substring(7);
+
+        if (token !== process.env.TOKEN_USER) {
+            res.status(401).json({ error: 'Unauthorized - Invalid Bearer token' });
+            return;
+        }
+
+        switch (req.method) {
+            case "GET":
+                if (req.query.id) {
+                    // Buscar um post por ID
+                    const postId = req.query.id;
+                    const postResult = await query({
+                        query: "SELECT * FROM post WHERE id_post = ?",
+                        values: [postId],
+                    });
+                    
+                    if (postResult.length === 0) {
+                        res.status(404).json({ error: "Post não encontrado" });
+                    } else {
+                        res.status(200).json({ post: postResult[0] });
+                    }
+                } else {
+                    // Listar todos os posts
+                    const posts = await query({
+                        query: "SELECT * FROM post", // Ajuste os campos se não quiser usar *
+                    });
+                    
+                    res.status(200).json({ posts: posts });
+                }
+                break;
+
+            case "POST":
+                // 1. Extraímos os dados que o seu frontend deve enviar no "body"
+                const {
+                    id_categoria,
+                    post, // O título/nome do post
+                    slug_post,
+                    imagem,
+                    descricao,
+                    embed_youtube,
+                    ativo
+                } = req.body;
+
+                // 2. Formatamos a data atual da mesma forma que você fez no método PUT
+                const dataAtualPost = new Date();
+                const diaPost = dataAtualPost.getDate();
+                const mesPost = dataAtualPost.getMonth() + 1;
+                const anoPost = dataAtualPost.getFullYear();
+                const dataFormatadaPost = `${anoPost}/${mesPost}/${diaPost}`;
+
+                // 3. Inserimos os dados na tabela 'post'
+                // Se o front não enviar algum campo, usamos um valor padrão (como uma string vazia ou 'S' para ativo)
+                const addPost = await query({
+                    query: `
+                        INSERT INTO post 
+                        (id_categoria, post, slug_post, imagem, descricao, views, data, embed_youtube, ativo) 
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    `,
+                    values: [
+                        id_categoria || 3,        // Categoria padrão (ajuste se precisar)
+                        post || "",               // Nome do post
+                        slug_post || "",          // Slug
+                        imagem || "",             // Caminho da imagem
+                        descricao || "",          // Descrição do post
+                        0,                        // Começa com 0 views ao criar
+                        dataFormatadaPost,        // Data da criação
+                        embed_youtube || "",      // ID do vídeo
+                        ativo || "S"              // Ativo 'S' por padrão
+                    ],
+                });
+
+                // 4. Montamos o objeto recém-criado (com o ID gerado pelo banco) para devolver ao frontend
+                const newPost = {
+                    id_post: addPost.insertId,
+                    id_categoria: id_categoria || 1,
+                    post: post || "",
+                    slug_post: slug_post || "",
+                    imagem: imagem || "",
+                    descricao: descricao || "",
+                    views: 0,
+                    data: dataFormatadaPost,
+                    embed_youtube: embed_youtube || "",
+                    ativo: ativo || "S"
+                };
+
+                // Retorna 201 (Created) ou 200 indicando sucesso!
+                res.status(201).json({ response: { message: "success", post: newPost } });
+                break;
+
+            case "PUT":
+
+                const dataAtual = new Date();
+
+                const dia = dataAtual.getDate();
+                const mes = dataAtual.getMonth() + 1; // Janeiro é 0
+                const ano = dataAtual.getFullYear();
+                const dataFormatada = `${ano}/${mes}/${dia}`
+                //   console.log(`Data atual: ${ano}/${mes}/${dia}`);
+                //   console.log(`Data formatada: ${dataFormatada}`);
+
+                const postId = req.body.id;
+                const postDescricao = req.body.descricao;
+                const postDescricaoHtml = '<p>A&ccedil;&otilde;es que estamos comprando para Hoje:</p><p>' + postDescricao + '</p><p>&nbsp;</p><p>DISCLAIMER. O conte&uacute;do apresentado nesta pagina n&atilde;o trata de recomenda&ccedil;&atilde;o, indica&ccedil;&atilde;o e/ou aconselhamento de investimento, sendo &uacute;nica e exclusiva responsabilidade do investidor a tomada de decis&atilde;o. O objetivo desta pagina &eacute; compartilhar informa&ccedil;&otilde;es sobre nosso projeto, que n&atilde;o deve ser replicado sem orienta&ccedil;&atilde;o profissional, pois, existe risco de perda de capital.</p><p>&nbsp;</p><p><em><strong>Facebook</strong></em>: <a href="https://www.facebook.com/groups/26959643750301883">https://www.facebook.com/groups/26959643750301883</a><br /><em><strong>Whastapp</strong></em>:&nbsp;<a href="https://chat.whatsapp.com/Di4xgRyrqp29OYUiS1Wc7x">https://chat.whatsapp.com/Di4xgRyrqp29OYUiS1Wc7x</a></p>'
+                //LOG
+                // console.log('Received PUT request. User ID:', postId, 'postDescricao:', postDescricao);
+
+
+                const updatePosts = await query({
+                    query: "UPDATE post SET descricao = ?, data = ? WHERE id_post = ?",
+                    values: [postDescricaoHtml, dataFormatada, postId],
+                });
+
+                // console.log('Database update successful.');
+
+                const updatePost = {
+                    id: postId,
+                    postDescricao: postDescricao,
+                    data: dataFormatada,
+                };
+                res.status(200).json({ response: { message: "success", post: updatePost } });
+                break;
+
+            default:
+                res.status(405).json({ error: "Method not allowed" });
+
+            //   case "DELETE":
+            //     const productIdToDelete = req.body.product_id;
+            //     const deleteProducts = await query({
+            //       query: "DELETE FROM products WHERE product_id = ?",
+            //       values: [productIdToDelete],
+            //     });
+            //     res.status(200).json({ response: { message: "success", product_id: productIdToDelete } });
+            //     break;
+
+            //   default:
+            //     res.status(405).json({ error: "Method not allowed" });
+        }
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+}
