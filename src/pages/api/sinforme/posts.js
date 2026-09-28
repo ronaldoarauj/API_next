@@ -23,7 +23,7 @@ export default async function handler(req, res) {
         switch (req.method) {
             case "GET":
                 if (req.query.id) {
-                    // Buscar um post por ID
+                    // 1. Buscar um post pelo ID do Banco de Dados (id_post)
                     const postId = req.query.id;
                     const postResult = await query({
                         query: "SELECT * FROM post WHERE id_post = ?",
@@ -35,10 +35,25 @@ export default async function handler(req, res) {
                     } else {
                         res.status(200).json({ post: postResult[0] });
                     }
+                    
+                } else if (req.query.embed_youtube) {
+                    // 2. Buscar um post pelo ID do vídeo do YouTube
+                    const videoId = req.query.embed_youtube;
+                    const videoResult = await query({
+                        query: "SELECT * FROM post WHERE embed_youtube = ?",
+                        values: [videoId],
+                    });
+                    
+                    if (videoResult.length === 0) {
+                        res.status(404).json({ error: "Vídeo não encontrado no banco de dados" });
+                    } else {
+                        res.status(200).json({ post: videoResult[0] });
+                    }
+
                 } else {
-                    // Listar todos os posts
+                    // 3. Listar todos os posts (caso não passe nenhum ID)
                     const posts = await query({
-                        query: "SELECT * FROM post", // Ajuste os campos se não quiser usar *
+                        query: "SELECT * FROM post", 
                     });
                     
                     res.status(200).json({ posts: posts });
